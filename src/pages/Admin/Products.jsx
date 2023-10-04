@@ -86,7 +86,7 @@ export function Products() {
         category: "",
     });
     useEffect(() => {
-        fetch('http://localhost:8080/products/all', {
+        fetch(`http:///${process.env.REACT_APP_API_HOST}/products/all`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -103,9 +103,9 @@ export function Products() {
             });
     });
     
-
+    
     const DeleteProduct = (id) => {
-        fetch(`http://localhost:8080/products/delete/${id}`, {
+        fetch(`http://${process.env.REACT_APP_API_HOST}/products/delete/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -123,7 +123,7 @@ export function Products() {
     }
 
     const HandleSave = () => {
-        fetch('http://localhost:8080/products/create', {
+        fetch(`http://${process.env.REACT_APP_API_HOST}/products/create`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

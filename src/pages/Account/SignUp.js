@@ -120,7 +120,7 @@ const SignUp = () => {
         zip
       ) {
         try {
-          const response = await fetch('http://localhost:8080/auth/register', {
+          const response = await fetch(`http:///${process.env.REACT_APP_API_HOST}/auth/register`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -179,7 +179,9 @@ const SignUp = () => {
       <div className="w-[450px] h-full bg-primeColor px-10 flex flex-col gap-6 justify-center">
         <Button
           className="bg-transparent text-white hover:bg-white hover:text-black border-[1px] border-white duration-300"
-          onClick={() => history("/shop")}
+          onClick={() => {
+            window.location.href = "/shop";
+          } }
         >
           Return To Shop
         </Button>

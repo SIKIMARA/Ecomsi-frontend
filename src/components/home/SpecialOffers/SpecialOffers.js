@@ -13,7 +13,7 @@ import { useEffect } from "react";
 const SpecialOffers = () => {
   const [products, setProducts] = useState([]);
   useEffect(() => {
-    fetch('http://localhost:8080/products/SpecialOffers', {
+    fetch(`http:///${process.env.REACT_APP_API_HOST}/products/SpecialOffers`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

@@ -10,7 +10,7 @@ const HeaderBottom = () => {
   const products = useSelector((state) => state.orebiReducer.products);
   const [paginationItems, setPaginationItems] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:8080/products/all", {
+    fetch(`http:///${process.env.REACT_APP_API_HOST}/products/all`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

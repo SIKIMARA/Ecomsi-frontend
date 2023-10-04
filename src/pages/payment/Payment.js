@@ -44,7 +44,7 @@ const Payment = () => {
     // You can handle form submission here
     console.log(formData);
     // Send the form data to your server or perform any other actions
-    fetch("http://localhost:8080/orders", {
+    fetch(`http:///${process.env.REACT_APP_API_HOST}/orders`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

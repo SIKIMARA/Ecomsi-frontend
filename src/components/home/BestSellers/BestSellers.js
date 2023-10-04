@@ -12,7 +12,7 @@ import { useState } from "react";
 const BestSellers = () => {
   const [products, setProducts] = useState([]);
   useEffect(() => {
-    fetch('http://localhost:8080/products/BestSellers', {
+    fetch(`http:///${process.env.REACT_APP_API_HOST}/products/BestSellers`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

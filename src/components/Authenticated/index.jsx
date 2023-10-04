@@ -20,7 +20,7 @@ const Authenticated = ({ children }) => {
     const token = localStorage.getItem('token');
     const role = localStorage.getItem('role');
     try {
-      const response = await fetch(`http://localhost:8080/auth/validate?token=${token}`, {
+      const response = await fetch(`http:///${process.env.REACT_APP_API_HOST}/auth/validate?token=${token}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

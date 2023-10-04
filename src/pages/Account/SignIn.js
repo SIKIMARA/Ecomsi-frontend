@@ -44,7 +44,7 @@ const SignIn = () => {
     if (email && password) {
       
       try {
-        const response = await fetch('http://localhost:8080/auth/token', {
+        const response = await fetch(`http:///${process.env.REACT_APP_API_HOST}/auth/token`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -115,7 +115,10 @@ const SignIn = () => {
         <div className="w-[450px] h-full bg-primeColor px-10 flex flex-col gap-6 justify-center">
         <Button
           className="bg-transparent text-white hover:bg-white hover:text-black border-[1px] border-white duration-300"
-          onClick={() => history("/shop")}
+          //refresh to /shop
+          onClick={() => {
+            window.location.href = "/shop";
+          } }
         >
           Return To Shop
         </Button>

@@ -14,7 +14,7 @@ import SamplePrevArrow from "./SamplePrevArrow";
 const NewArrivals = () => {
   const [products, setProducts] = useState([]);
   useEffect(() => {
-    fetch('http://localhost:8080/products/NewArrivals', {
+    fetch(`http:///${process.env.REACT_APP_API_HOST}/products/NewArrivals`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
