@@ -5,42 +5,41 @@ import ProductInfo from "../../components/pageProps/productDetails/ProductInfo";
 import ProductsOnSale from "../../components/pageProps/productDetails/ProductsOnSale";
 import { Rating } from "@material-tailwind/react";
 import Review from "./Review";
+import { motion } from "framer-motion";
 
 const ProductDetails = () => {
+  
   const user=localStorage.getItem("user")
   const email=localStorage.getItem("email")
   const id=localStorage.getItem("id")
   // get actual date
   const date = new Date().toLocaleDateString();
-  const [rated, setRated] = React.useState(4);
   
-  const reviews=[
-    
-    {
-      id:2,
-      user_name:"John Doe",
-      user_email:"Doe@eùail.com",
-      date:"12/12/2021",
-      comment:"Lorem ipsum dolor sit amet consect test test",
-      rating:2
-    },{
-      id:3,
-      user_name:"John Doe",
-      user_email:"Doe@eùail.com",
-      date:"12/12/2021",
-      comment:"Lorem ipsum dolor sit amet consect test test",
-      rating:4
-    },
-    
-  ]
+  
+  const [reviews,setReviews]=useState([])
   const location = useLocation();
   const [prevLocation, setPrevLocation] = useState("");
   const [productInfo, setProductInfo] = useState([]);
-
+  const [ReviewsChange,setReviewsChange]=useState(false)
   useEffect(() => {
     setProductInfo(location.state.item);
     setPrevLocation(location.pathname);
   }, [location, productInfo]);
+  useEffect(() => {
+    
+    fetch(`http:///${process.env.REACT_APP_API_HOST}/products/reviews/product/${location.state.item._id}`, {
+        method: 'GET',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+    })
+        .then(response => response.json())
+        .then(data => {
+           
+            setReviews(data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+}, [ReviewsChange]);
 
   const [review,setReview]=useState(
     {
@@ -48,13 +47,32 @@ const ProductDetails = () => {
       user_email:email,
       date:date,
       comment:"",
-      rating:rated,
+      rating:4,
       user_id:id,
       product:{
-        id:productInfo._id
+        id:location.state.item._id,
       }
     }
   )
+  const HandlePost=()=>{
+    console.log(review)
+    fetch(`http:///${process.env.REACT_APP_API_HOST}/products/reviews/create`, {
+        method: 'POST',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(review),
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            setReviewsChange(!ReviewsChange)
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+  }
 
   return (
     <div className="w-full mx-auto border-b-[1px] border-b-gray-300">
@@ -86,17 +104,21 @@ const ProductDetails = () => {
                   <label class="mb-2 font-bold text-lg text-gray-900 dark:text-gray-200" for="rating">
                       Rating :
                   </label>
-                  <Rating value={rated} onChange={(value) => setRated(value)} />
+                  <Rating value={review.rating} onChange={
+                    (e)=>setReview({...review,rating:e})
+                  }  />
+                  
+                 
               </div>
               <div class="py-2 px-4 mb-4 bg-white w-full rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
                   <textarea id="comment" rows="6"
                       class="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
                       placeholder="Write a comment..." required 
-                      onClick={(e)=>setReview({...review,comment:e.target.value})}
+                      onChange={(e)=>setReview({...review,comment:e.target.value})}
                       ></textarea>
               </div>
               <button type="submit"
-                  onClick={()=>  console.log(productInfo._id)}
+                  onClick={HandlePost}
                   class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-black rounded-lg focus:ring-4 focus:ring-primary-200 hover:bg-primary-800">
                   Post comment
               </button>
@@ -105,16 +127,19 @@ const ProductDetails = () => {
             <p className="text-xl font-semibold">Please <a href="/signin" className="text-primeColor">Sign in</a> to leave a review.</p>
           }
           {
-            reviews==[] ?
+            reviews ?
             <p className="text-xl font-semibold">No reviews yet</p>
             :
-            <div className="w-full flex items-start flex-wrap">
-            {
-              reviews.map((reviews)=>(
-                <Review reviews={reviews} key={reviews.id} />
-              ))
-            }
-            </div>
+            <motion.div
+            initial={{ opacity: 0, y: 20 }} // Initial animation state
+            animate={{ opacity: 1, y: 0 }} // Animation on enter
+            transition={{ duration: 0.5, delay: 0.2 }} // Animation duration and delay
+            className="w-full flex items-start flex-wrap"
+          >
+            {reviews.map((review) => (
+              <Review reviews={review} key={review.id} />
+            ))}
+          </motion.div>
             }
         </div>
       </div>

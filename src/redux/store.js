@@ -12,6 +12,7 @@ import {
 import storage from "redux-persist/lib/storage";
 import orebiReducer from "./orebiSlice";
 import productReducer from "./ProductSlice";
+import WishListReducer from "./WishListSlice";
 
 const persistConfig = {
   key: "root",
@@ -25,6 +26,7 @@ export const store = configureStore({
   reducer: { 
     orebiReducer: persistedReducer,
     productReducer: persistReducer(persistConfig, productReducer),    
+    WishListReducer: persistReducer(persistConfig, WishListReducer),
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
